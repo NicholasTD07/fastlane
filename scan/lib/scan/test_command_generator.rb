@@ -70,6 +70,9 @@ module Scan
         options += config[:only_test_configurations].map { |name| "-only-test-configuration '#{name}'" } if config[:only_test_configurations]
         options += config[:skip_test_configurations].map { |name| "-skip-test-configuration '#{name}'" } if config[:skip_test_configurations]
       end
+      if FastlaneCore::Helper.xcode_at_least?(13)
+        options << "-retry-tests-on-failure " if config[:retry_tests_on_failure]
+      end
       options << "-xctestrun '#{config[:xctestrun]}'" if config[:xctestrun]
       options << config[:xcargs] if config[:xcargs]
 

@@ -492,8 +492,13 @@ module Scan
                                     env_name: 'SCAN_NUMBER_OF_RETRIES',
                                     description: "The number of times a test can fail before scan should stop retrying",
                                     type: Integer,
-                                    default_value: 0)
-
+                                    default_value: 0),
+        FastlaneCore::ConfigItem.new(key: :retry_tests_on_failure,
+                                    env_name: "RETRY_TESTS_ON_FAILURE",
+                                    description: "Let xcodebuild retry on test failures",
+                                    optional: true,
+                                    type: Boolean,
+                                    default_value: false)
       ]
     end
   end

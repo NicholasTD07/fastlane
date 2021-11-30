@@ -88,6 +88,18 @@ describe Scan do
       end.to raise_error("Project file not found at path '#{path}'")
     end
 
+    describe "Supports Xcode's -retry-tests-on-failure" do
+      it "passes the -retry-tests-on-failure option to xcodebuild", requires_xcodebuild: true do
+        options = { project: "./scan/examples/standard/app.xcodeproj", retry_tests_on_failure: true }
+        Scan.config = FastlaneCore::Configuration.create(Scan::Options.available_options, options)
+        result = @test_command_generator.generate
+
+        if FastlaneCore::Helper.xcode_at_least?(13)
+          expect(result).to include("--retry-tests-on-failure").once
+        end
+      end
+    end
+
     describe "Supports toolchain" do
       it "should fail if :xctestrun and :toolchain is set" do
         allow(FastlaneCore::FastlaneFolder).to receive(:path).and_return(".")
